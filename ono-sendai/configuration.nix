@@ -26,7 +26,6 @@
   # List packages installed in system profile. To search by name, run:
   # -env -qaP | grep wget
   environment.systemPackages = with pkgs; [
-      conkeror
       lynx
       emacs24
       mg
@@ -70,4 +69,8 @@
   ];
 
   time.timeZone = "PST8PDT";
+
+  networking.firewall.enable = true;
+  networking.firewall.allowedTCPPorts = [ 80 443 ];
+
 }
