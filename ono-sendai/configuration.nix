@@ -44,6 +44,8 @@
       dmenu
       gnupg
       cmus
+      tmux
+      fish
   ];
 
   services.openssh.enable = true;
@@ -62,6 +64,11 @@
     export SLIM_THEMESDIR=/nix/store/b3p1w1bn3vz68ijpqbz6
     xmodmap $HOME/.xmodmaprc
     xscreensaver -no-splash &
+    if [ -e $HOME/.fehbg ];
+    then
+        $(cat $HOME/.fehbg)
+    fi
+    eval $(ssh-agent)
   '';
 
   environment.shells = [
