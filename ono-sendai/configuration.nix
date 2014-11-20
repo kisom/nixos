@@ -16,6 +16,7 @@
     device = "/dev/sda3";
     preLVM = true;
   }];
+  boot.kernelModules = [ "snd-seq" "snd-rawmidi" ];
 
   networking.hostName = "ono-sendai"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless.
@@ -64,10 +65,7 @@
     export SLIM_THEMESDIR=/nix/store/b3p1w1bn3vz68ijpqbz6
     xmodmap $HOME/.xmodmaprc
     xscreensaver -no-splash &
-    if [ -e $HOME/.fehbg ];
-    then
-        $(cat $HOME/.fehbg)
-    fi
+    $HOME/bin/setbg
     eval $(ssh-agent)
   '';
 
@@ -80,4 +78,17 @@
   networking.firewall.enable = true;
   networking.firewall.allowedTCPPorts = [ 80 443 ];
 
+  # this should enable the trackpoint
+  hardware.trackpoint.enable = true;
+  hardware.trackpoint.emulateWheel = true;
+
+  # FIDO YubiKey
+  services.udev.extraRules = ''
+	ACTION!="add|change", GOTO="u2f_end"
+	KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="1050", ATTRS{idProduct}=="0113|0114|0115|0116|0120", TAG+="uaccess"
+	LABEL="u2f_end"
+  '';
+
+  hardware.pulseaudio.enable = true;
+  hardware.pulseaudio.package = pkgs.pulseaudio.override { jackaudioSupport = true; };
 }
