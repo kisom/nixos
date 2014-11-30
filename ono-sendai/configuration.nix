@@ -56,6 +56,7 @@
   services.xserver.layout = "us";
   services.xserver.windowManager.xmonad.enable = true;
   services.xserver.windowManager.default = "xmonad";
+  #services.xserver.windowManager.default = "stumpwm";
   services.xserver.desktopManager.default = "none";
   services.xserver.windowManager.xmonad.enableContribAndExtras = true;
 
@@ -84,9 +85,7 @@
 
   # FIDO YubiKey
   services.udev.extraRules = ''
-	ACTION!="add|change", GOTO="u2f_end"
-	KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="1050", ATTRS{idProduct}=="0113|0114|0115|0116|0120", TAG+="uaccess"
-	LABEL="u2f_end"
+     KERNEL=="hidraw*", SUBSYSTEM=="hidraw", MODE="0664", GROUP="wheel", ATTRS{idVendor}=="1050", ATTRS{idProduct}=="0113|0114|0115|0116|0120"
   '';
 
   hardware.pulseaudio.enable = true;
